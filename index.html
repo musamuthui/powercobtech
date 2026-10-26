@@ -1,0 +1,1820 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Powercob Technologies — Websites, Business Apps & Networking Solutions</title>
+  <meta name="description" content="Powercob Technologies develops professional websites, business applications, and networking solutions for organizations that need reliable, well-built software and infrastructure." />
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0%25' stop-color='%2310b981'/><stop offset='100%25' stop-color='%232563eb'/></linearGradient></defs><rect width='100' height='100' rx='22' fill='url(%23g)'/><g fill='none' stroke='%23fff' stroke-width='7' stroke-linecap='round' stroke-linejoin='round'><path d='M35 32 L35 68 L62 50 Z'/><circle cx='68' cy='32' r='7'/><circle cx='68' cy='68' r='7'/></g></svg>" />
+
+  <!-- Preload the hero image for instant sharp render -->
+  <link rel="preload" as="image" href="https://i.postimg.cc/dVnPD75R/Powercob-Technologies-Office-Hero.png" fetchpriority="high" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ============================================================
+       TOKENS
+    ============================================================ */
+    :root {
+      --page-bg: #f0f5f0;
+      --panel: #ffffff;
+      --panel-soft: #f7fbf8;
+      --panel-warm: #fbfcf8;
+      --panel-cool: #f4faf6;
+
+      --green: #10b981;
+      --green-2: #059669;
+      --green-deep: #047857;
+      --green-soft: #d1fae5;
+      --green-glow: rgba(16, 185, 129, .18);
+      --green-border: #a7e4c7;
+      --green-border-strong: #6ee7b7;
+
+      --border: #e6e9ef;
+      --border-strong: #d1d7e0;
+      --text: #0a0f1c;
+      --text-soft: #4a5568;
+      --muted: #8892a3;
+
+      --radius-panel: 32px;
+      --radius-lg: 24px;
+      --radius: 16px;
+      --maxw: 1180px;
+      --gutter: 24px;
+
+      --shadow-sm: 0 1px 2px rgba(15,23,42,.04);
+      --shadow-md: 0 4px 16px -4px rgba(15,23,42,.08);
+      --shadow-lg: 0 24px 60px -20px rgba(15,23,42,.14);
+      --shadow-panel:
+        0 0 0 1px var(--green-border),
+        0 2px 4px rgba(4,120,87,.04),
+        0 16px 40px -20px var(--green-glow);
+
+      /* Hero background image */
+      --hero-image: url("https://i.postimg.cc/dVnPD75R/Powercob-Technologies-Office-Hero.png");
+    }
+
+    /* ============================================================
+       RESET
+    ============================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    body {
+      font-family: "Inter", system-ui, -apple-system, sans-serif;
+      background: var(--page-bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.65;
+      overflow-x: hidden;
+      padding-bottom: 48px;
+    }
+    body.modal-open { overflow: hidden; }
+    body.splash-active { overflow: hidden; }
+    img, svg { max-width: 100%; display: block; }
+    a { color: inherit; text-decoration: none; }
+    ul { list-style: none; }
+    button { font-family: inherit; cursor: pointer; }
+
+    .container {
+      max-width: var(--maxw);
+      margin: 0 auto;
+      padding: 0 var(--gutter);
+      width: 100%;
+    }
+
+    /* ============================================================
+       SPLASH
+    ============================================================ */
+    .splash {
+      position: fixed; inset: 0; z-index: 9999;
+      display: flex; align-items: center; justify-content: center; flex-direction: column;
+      background:
+        radial-gradient(ellipse 70% 60% at 50% 40%, rgba(16,185,129,.18), transparent 70%),
+        radial-gradient(ellipse 50% 50% at 80% 20%, rgba(37,99,235,.12), transparent 70%),
+        #0a1f17;
+      color: #fff;
+      transition: opacity .8s ease, visibility .8s;
+      cursor: pointer;
+    }
+    .splash.fade-out { opacity: 0; visibility: hidden; pointer-events: none; }
+    .splash::before {
+      content: "";
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(16,185,129,.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(16,185,129,.06) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, #000 30%, transparent 75%);
+      -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, #000 30%, transparent 75%);
+      pointer-events: none;
+    }
+    .splash-inner {
+      position: relative; z-index: 1;
+      display: flex; flex-direction: column; align-items: center; gap: 40px;
+    }
+    .splash-logo {
+      width: clamp(140px, 22vw, 220px); height: auto;
+      animation: logoAppear 1.2s cubic-bezier(.2,.8,.2,1) both;
+      filter: drop-shadow(0 20px 60px rgba(16,185,129,.45));
+    }
+    .splash-logo .draw-shape {
+      stroke-dasharray: 200; stroke-dashoffset: 200;
+      animation: drawStroke 1.6s cubic-bezier(.2,.8,.2,1) forwards;
+    }
+    .splash-logo .draw-shape:nth-child(1) { animation-delay: .3s; }
+    .splash-logo .draw-shape:nth-child(2) { animation-delay: .55s; }
+    .splash-logo .draw-shape:nth-child(3) { animation-delay: .8s; }
+    .splash-logo .draw-shape:nth-child(4) { animation-delay: 1.05s; }
+    .splash-logo .draw-shape:nth-child(5) { animation-delay: 1.3s; }
+    @keyframes drawStroke { to { stroke-dashoffset: 0; } }
+    @keyframes logoAppear { from { opacity: 0; transform: scale(.9); } to { opacity: 1; transform: scale(1); } }
+    .splash-wordmark {
+      text-align: center; opacity: 0;
+      animation: fadeUp .8s cubic-bezier(.2,.8,.2,1) 1.8s forwards;
+    }
+    .splash-wordmark h1 {
+      font-family: "Fraunces", Georgia, serif;
+      font-size: clamp(1.4rem, 3.2vw, 2rem);
+      font-weight: 500; letter-spacing: -.02em;
+      margin-bottom: 10px; color: #fff;
+    }
+    .splash-wordmark p {
+      font-size: 11.5px; font-weight: 600;
+      letter-spacing: .32em; text-transform: uppercase;
+      color: var(--green-border-strong);
+    }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+    .splash-bar {
+      width: clamp(180px, 32vw, 280px); height: 2px;
+      background: rgba(255,255,255,.12);
+      border-radius: 999px; overflow: hidden;
+      opacity: 0;
+      animation: fadeUp .6s ease 2.2s forwards;
+    }
+    .splash-bar::after {
+      content: ""; display: block; height: 100%; width: 0;
+      background: linear-gradient(90deg, var(--green), var(--green-border-strong));
+      border-radius: 999px;
+      animation: loadBar 2.6s cubic-bezier(.4,0,.2,1) 2.2s forwards;
+    }
+    @keyframes loadBar { to { width: 100%; } }
+    .splash-skip {
+      position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%);
+      font-size: 11.5px; letter-spacing: .18em; text-transform: uppercase;
+      color: rgba(255,255,255,.4);
+      opacity: 0;
+      animation: fadeUp .6s ease 2.8s forwards;
+      z-index: 1;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .splash-logo .draw-shape { animation: none; stroke-dashoffset: 0; }
+      .splash-logo { animation: none; opacity: 1; }
+      .splash-wordmark { animation: none; opacity: 1; }
+      .splash-bar { animation: none; opacity: 1; }
+      .splash-bar::after { animation: none; width: 100%; }
+      .splash-skip { animation: none; opacity: 1; }
+      .splash { transition: none; }
+    }
+
+    /* ============================================================
+       BUTTONS
+    ============================================================ */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 12px 22px; border-radius: 12px; font-weight: 600; font-size: 14px;
+      transition: transform .2s cubic-bezier(.2,.8,.2,1), box-shadow .2s, background .2s, border-color .2s;
+      border: 1px solid transparent; white-space: nowrap;
+      min-height: 44px;
+    }
+    .btn:disabled { opacity: .6; cursor: not-allowed; transform: none !important; }
+    .btn-primary { background: var(--text); color: #fff; box-shadow: 0 8px 20px -8px rgba(10,15,28,.4); }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 14px 28px -8px rgba(10,15,28,.5); background: #1a2333; }
+    .btn-gradient {
+      background: linear-gradient(135deg, var(--green-2), var(--green));
+      color: #fff;
+      box-shadow: 0 10px 24px -8px rgba(16,185,129,.45);
+    }
+    .btn-gradient:hover { transform: translateY(-2px); box-shadow: 0 16px 32px -8px rgba(16,185,129,.55); }
+    .btn-ghost { color: var(--text-soft); background: transparent; }
+    .btn-ghost:hover { color: var(--text); background: rgba(10,15,28,.05); }
+    .btn-outline {
+      background: #fff; color: var(--text);
+      border-color: var(--border-strong);
+      box-shadow: var(--shadow-sm);
+    }
+    .btn-outline:hover { border-color: var(--green-2); color: var(--green-deep); transform: translateY(-2px); box-shadow: var(--shadow-md); }
+    .btn-lg { padding: 15px 28px; font-size: 15px; border-radius: 14px; min-height: 50px; }
+    .btn-block { width: 100%; }
+    .btn-white { background: #fff; color: var(--green-deep); }
+    .btn-white:hover { background: #f4f6f9; transform: translateY(-2px); }
+    .btn-glass {
+      background: rgba(255,255,255,.15); color: #fff;
+      border-color: rgba(255,255,255,.3);
+      backdrop-filter: blur(10px);
+    }
+    .btn-glass:hover { background: rgba(255,255,255,.25); transform: translateY(-2px); }
+
+    .spinner {
+      width: 16px; height: 16px;
+      border: 2px solid rgba(255,255,255,.4);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ============================================================
+       HEADER
+    ============================================================ */
+    .site-header {
+      position: fixed; inset: 0 0 auto 0; z-index: 100;
+      transition: background .3s, box-shadow .3s, backdrop-filter .3s;
+      background: rgba(240,245,240,.6);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+    .site-header.scrolled {
+      background: rgba(240,245,240,.94);
+      box-shadow: 0 1px 0 rgba(16,185,129,.18), 0 8px 24px -16px rgba(15,23,42,.12);
+    }
+    .header-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      height: 78px;
+    }
+
+    .logo { display: inline-flex; align-items: center; gap: 12px; }
+    .logo-mark {
+      width: 42px; height: 42px;
+      display: block; flex-shrink: 0;
+      transition: transform .3s;
+    }
+    .logo:hover .logo-mark { transform: rotate(-6deg) scale(1.05); }
+    .logo-text { display: flex; flex-direction: column; line-height: 1; }
+    .logo-text strong {
+      font-family: "Inter", system-ui, sans-serif;
+      font-size: 18px; font-weight: 800;
+      letter-spacing: -.02em; color: var(--text);
+    }
+    .logo-text span {
+      font-size: 9.5px; font-weight: 600;
+      letter-spacing: .22em; text-transform: uppercase;
+      color: var(--green-2); margin-top: 4px;
+    }
+
+    .main-nav ul { display: flex; gap: 4px; }
+    .main-nav a, .main-nav button {
+      color: var(--text-soft); font-size: 14.5px; font-weight: 500;
+      padding: 8px 14px; border-radius: 8px;
+      transition: color .2s, background .2s;
+      background: transparent; border: 0;
+    }
+    .main-nav a:hover, .main-nav button:hover { color: var(--green-deep); background: rgba(16,185,129,.1); }
+
+    .header-actions { display: flex; align-items: center; gap: 8px; }
+
+    .nav-toggle {
+      display: none; background: none; border: 0; padding: 10px;
+      border-radius: 8px; min-width: 44px; min-height: 44px;
+      align-items: center; justify-content: center; flex-direction: column;
+    }
+    .nav-toggle:hover { background: rgba(10,15,28,.05); }
+    .nav-toggle span {
+      display: block; width: 22px; height: 2px;
+      background: var(--text); margin: 2.5px 0; border-radius: 2px;
+      transition: .3s;
+    }
+
+    /* ============================================================
+       PANELS
+    ============================================================ */
+    .panel {
+      background: var(--panel);
+      border: 2px solid var(--green-border);
+      border-radius: var(--radius-panel);
+      box-shadow: var(--shadow-panel);
+      padding: 96px 0;
+      margin: 24px auto;
+      max-width: var(--maxw);
+      overflow: hidden;
+      position: relative;
+      transition: border-color .3s, box-shadow .3s;
+    }
+    .panel:hover {
+      border-color: var(--green-border-strong);
+      box-shadow:
+        0 0 0 1px var(--green-border-strong),
+        0 2px 4px rgba(4,120,87,.05),
+        0 20px 48px -20px rgba(16,185,129,.28);
+    }
+    .panel-warm { background: var(--panel-warm); }
+    .panel-soft { background: var(--panel-soft); }
+    .panel-cool { background: var(--panel-cool); }
+    .panel-dark {
+      background: linear-gradient(135deg, #064e3b 0%, #059669 100%);
+      color: #fff; border-color: var(--green-border);
+      box-shadow:
+        0 0 0 1px var(--green-border),
+        0 2px 4px rgba(4,120,87,.08),
+        0 24px 60px -20px rgba(5,150,105,.4);
+    }
+    .panel-dark:hover {
+      border-color: var(--green-border-strong);
+      box-shadow:
+        0 0 0 1px var(--green-border-strong),
+        0 24px 60px -20px rgba(5,150,105,.5);
+    }
+    .panel-dark::before {
+      content: "";
+      position: absolute; inset: 0;
+      background-image:
+        radial-gradient(circle at 15% 30%, rgba(255,255,255,.1), transparent 40%),
+        radial-gradient(circle at 85% 70%, rgba(255,255,255,.07), transparent 40%);
+      pointer-events: none;
+    }
+
+    /* ============================================================
+       HERO — Fixed Background & Overlay
+    ============================================================ */
+    .hero-panel {
+      margin-top: 94px;
+      padding: 120px 0 100px;
+      text-align: center;
+      position: relative;
+      isolation: isolate;
+      border-radius: var(--radius-panel);
+      overflow: hidden;
+
+      /* Image layer */
+      background-image: var(--hero-image);
+      background-size: cover;
+      background-position: center bottom; /* Keeps the laptop visible at the bottom */
+      background-repeat: no-repeat;
+      background-color: #f8faf9; 
+      image-rendering: -webkit-optimize-contrast;
+    }
+
+    /* Gradient Overlay: White at top (for text), clear at bottom (for image) */
+    .hero-panel::before {
+      content: "";
+      position: absolute; inset: 0;
+      background: linear-gradient(
+        180deg, 
+        rgba(251, 252, 248, 0.98) 0%,     /* Solid white top */
+        rgba(251, 252, 248, 0.90) 35%,    /* Fades slightly down to the text */
+        rgba(251, 252, 248, 0.50) 65%,    /* Lighter in the middle */
+        rgba(251, 252, 248, 0.10) 100%    /* Almost clear at the bottom */
+      );
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Soft radial glow right behind the text for extra legibility */
+    .hero-panel::after {
+      content: "";
+      position: absolute; inset: 0;
+      background: radial-gradient(
+        ellipse 70% 50% at 50% 30%,
+        rgba(255, 255, 255, 0.9) 0%,
+        rgba(255, 255, 255, 0.4) 60%,
+        transparent 100%
+      );
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .hero-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-title {
+      font-family: "Fraunces", Georgia, serif;
+      font-size: clamp(2.2rem, 5.5vw, 4.2rem);
+      line-height: 1.1;
+      letter-spacing: -.03em;
+      font-weight: 500;
+      color: #0a0f1c;
+      text-wrap: balance;
+      text-shadow: 0 2px 10px rgba(255, 255, 255, 0.8); /* Softer, wider shadow */
+    }
+    .hero-title em {
+      font-style: italic;
+      color: var(--green-2);
+    }
+
+    .hero-sub {
+      margin: 24px auto 0;
+      font-size: clamp(1rem, 1.6vw, 1.15rem);
+      line-height: 1.7;
+      color: #334155;
+      max-width: 640px;
+      font-weight: 500;
+      text-wrap: pretty;
+      text-shadow: 0 1px 8px rgba(255, 255, 255, 1);
+    }
+
+    .hero-pillars {
+      display: flex; flex-wrap: wrap; justify-content: center;
+      gap: 10px; margin-top: 32px;
+    }
+    
+    .pillar {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 9px 16px; border-radius: 999px;
+      background: rgba(255,255,255,.95);
+      border: 1px solid var(--green-border);
+      font-size: 13.5px; font-weight: 600;
+      color: var(--text);
+      box-shadow: 0 4px 12px rgba(4,120,87,.08);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      white-space: nowrap;
+      transition: border-color .2s, background .2s;
+    }
+    .pillar:hover { border-color: var(--green-border-strong); background: #fff; transform: translateY(-1px); }
+
+    .hero-ctas {
+      display: flex; gap: 12px; margin-top: 40px;
+      justify-content: center; flex-wrap: wrap;
+    }
+    
+    /* Give the buttons a slight glass look so they stand out on the desk */
+    .hero-ctas .btn-outline {
+      background: rgba(255,255,255, 0.9);
+      backdrop-filter: blur(4px);
+      border-color: rgba(255,255,255, 0.8);
+    }
+
+    .hero-proof {
+      display: flex; align-items: center; justify-content: center;
+      gap: 14px; margin-top: 48px;
+      color: #334155; font-size: 14px; font-weight: 500;
+      flex-wrap: wrap;
+      text-shadow: 0 1px 4px rgba(255, 255, 255, 1);
+    }
+    .avatars { display: flex; }
+    .avatars span {
+      width: 32px; height: 32px; border-radius: 50%;
+      border: 2.5px solid #fff; margin-left: -10px;
+      box-shadow: var(--shadow-sm);
+    }
+    .avatars span:nth-child(1) { background: linear-gradient(135deg, #60a5fa, #3b82f6); }
+    .avatars span:nth-child(2) { background: linear-gradient(135deg, #a78bfa, #8b5cf6); }
+    .avatars span:nth-child(3) { background: linear-gradient(135deg, #f472b6, #ec4899); }
+    .avatars span:nth-child(4) { background: linear-gradient(135deg, #6ee7b7, #10b981); }
+    .avatars span:first-child { margin-left: 0; }
+    .hero-proof strong { color: var(--text); font-weight: 700; }
+
+    .hero-inner > * {
+      opacity: 0; transform: translateY(16px);
+      animation: rise 1s cubic-bezier(.2,.8,.2,1) forwards;
+    }
+    .hero-inner > *:nth-child(1){animation-delay:5.4s}
+    .hero-inner > *:nth-child(2){animation-delay:5.55s}
+    .hero-inner > *:nth-child(3){animation-delay:5.7s}
+    .hero-inner > *:nth-child(4){animation-delay:5.8s}
+    .hero-inner > *:nth-child(5){animation-delay:5.9s}
+    .hero-inner > *:nth-child(6){animation-delay:6s}
+    @keyframes rise { to { opacity: 1; transform: none; } }
+
+    /* Mobile adjustments for hero */
+    @media (max-width: 640px) {
+      .hero-panel::before {
+        background: linear-gradient(
+          180deg, 
+          rgba(251, 252, 248, 0.98) 0%,     
+          rgba(251, 252, 248, 0.95) 50%,    
+          rgba(251, 252, 248, 0.80) 100%    
+        );
+      }
+    }
+
+    .section-head {
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto clamp(40px, 7vw, 72px);
+    }
+    .section-tag {
+      display: inline-block;
+      font-size: 11.5px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: .16em;
+      color: var(--green-2); margin-bottom: 20px;
+    }
+    .section-title {
+      font-family: "Fraunces", Georgia, serif;
+      font-size: clamp(1.7rem, 4vw, 2.8rem);
+      font-weight: 500; letter-spacing: -.02em;
+      line-height: 1.15; color: var(--text);
+      text-wrap: balance;
+    }
+    .section-sub {
+      margin-top: 18px;
+      font-size: clamp(0.98rem, 1.4vw, 1.08rem);
+      color: var(--text-soft);
+      line-height: 1.7;
+      text-wrap: pretty;
+    }
+
+    .trusted-panel { padding: 48px 0; }
+    .trusted-label {
+      text-align: center;
+      font-size: 11.5px; font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase; letter-spacing: .16em;
+      margin-bottom: 28px;
+    }
+    .marquee {
+      display: flex; overflow: hidden;
+      mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+      -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+    }
+    .marquee-track {
+      display: flex; gap: 72px;
+      padding-right: 72px;
+      animation: scroll 40s linear infinite;
+      flex-shrink: 0;
+    }
+    .marquee-track span {
+      font-size: 17px; font-weight: 600;
+      color: #b8ccc0; letter-spacing: -.01em;
+      white-space: nowrap; transition: color .3s;
+    }
+    .marquee-track span:hover { color: var(--green-2); }
+    @keyframes scroll { to { transform: translateX(-100%); } }
+
+    .service-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .service {
+      background: #fff;
+      border: 2px solid var(--green-border);
+      border-radius: var(--radius-lg);
+      padding: 40px 32px;
+      transition: transform .3s cubic-bezier(.2,.8,.2,1), box-shadow .3s, border-color .3s;
+      display: flex; flex-direction: column;
+      cursor: pointer;
+    }
+    .service:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 48px -20px rgba(16,185,129,.28);
+      border-color: var(--green-border-strong);
+    }
+    .service:focus-visible { outline: 3px solid var(--green-2); outline-offset: 4px; }
+    .service-icon {
+      width: 56px; height: 56px;
+      display: grid; place-items: center;
+      border-radius: 14px; font-size: 26px;
+      margin-bottom: 24px;
+    }
+    .service h3 {
+      font-family: "Fraunces", Georgia, serif;
+      font-size: clamp(1.2rem, 2vw, 1.5rem);
+      font-weight: 500; letter-spacing: -.015em;
+      margin-bottom: 14px; color: var(--text);
+      line-height: 1.25;
+    }
+    .service p { color: var(--text-soft); font-size: 15px; line-height: 1.7; margin-bottom: 24px; }
+    .service-list {
+      display: flex; flex-direction: column; gap: 10px;
+      margin-top: auto; padding-top: 20px;
+      border-top: 1px solid var(--green-soft);
+    }
+    .service-list li {
+      color: var(--text-soft); font-size: 14px;
+      padding-left: 22px; position: relative;
+    }
+    .service-list li::before {
+      content: "→"; position: absolute; left: 0;
+      color: var(--green-2); font-weight: 700;
+    }
+    .service-icon.blue { background: #eff6ff; color: #2563eb; }
+    .service-icon.purple { background: #f5f3ff; color: #7c3aed; }
+    .service-icon.green { background: #ecfdf5; color: #059669; }
+
+    .steps {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 32px;
+    }
+    .step { padding: 8px 0; }
+    .step-num {
+      font-family: "Fraunces", Georgia, serif;
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      font-weight: 500; color: var(--green-2);
+      line-height: 1; letter-spacing: -.02em;
+      margin-bottom: 18px; display: block;
+    }
+    .step h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 10px; color: var(--text); }
+    .step p { color: var(--text-soft); font-size: 14.5px; line-height: 1.65; }
+
+    .why-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .why-item {
+      padding: 28px;
+      background: rgba(255,255,255,.7);
+      border: 1.5px solid var(--green-border);
+      border-radius: var(--radius-lg);
+      transition: background .3s, border-color .3s;
+    }
+    .why-item:hover { background: #fff; border-color: var(--green-border-strong); }
+    .why-item h3 { font-size: 1rem; font-weight: 700; margin-bottom: 10px; color: var(--text); }
+    .why-item p { color: var(--text-soft); font-size: 14px; line-height: 1.65; }
+
+    .quote-wrap { max-width: 780px; margin: 0 auto; text-align: center; }
+    .quote {
+      font-family: "Fraunces", Georgia, serif;
+      font-size: clamp(1.2rem, 3vw, 1.9rem);
+      font-weight: 500; line-height: 1.5;
+      color: var(--text); letter-spacing: -.015em;
+      text-wrap: balance;
+    }
+    .quote-author {
+      display: inline-flex; align-items: center; gap: 14px;
+      margin-top: 36px;
+      color: var(--text-soft); font-size: 14px;
+      flex-wrap: wrap; justify-content: center;
+    }
+    .quote-avatar {
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #6ee7b7, #10b981);
+      display: grid; place-items: center;
+      font-weight: 700; color: #fff; font-size: 15px;
+      border: 3px solid #fff;
+      box-shadow: var(--shadow-md);
+      flex-shrink: 0;
+    }
+    .quote-author > div { text-align: left; }
+    .quote-author strong { display: block; color: var(--text); font-size: 14.5px; font-weight: 600; }
+    .quote-author span { color: var(--muted); font-size: 13px; }
+
+    .cta-panel { padding: 96px 0; text-align: center; }
+    .cta-inner { position: relative; z-index: 1; max-width: 640px; margin: 0 auto; }
+    .cta-inner h2 {
+      font-family: "Fraunces", Georgia, serif;
+      font-size: clamp(1.6rem, 3.8vw, 2.6rem);
+      font-weight: 500; letter-spacing: -.02em;
+      margin-bottom: 14px; line-height: 1.2;
+      text-wrap: balance;
+    }
+    .cta-inner p {
+      color: rgba(255,255,255,.9);
+      font-size: clamp(0.98rem, 1.4vw, 1.08rem);
+      margin-bottom: 32px;
+    }
+    .cta-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+    .footer-panel { padding: 72px 0 0; }
+    .footer-grid {
+      display: grid; grid-template-columns: 1.8fr 1fr 1fr 1fr;
+      gap: 48px; padding-bottom: 56px;
+    }
+    
+    /* ============================================================
+       FOOTER LOGO IMAGE STYLES
+    ============================================================ */
+    .footer-logo-wrap {
+      display: inline-flex; align-items: center; 
+      margin-bottom: 18px;
+      background: none; border: 0; padding: 0; cursor: pointer;
+      text-decoration: none;
+    }
+    .footer-logo-img {
+      height: 54px; /* Adjust height as needed */
+      width: auto;
+      max-width: 260px;
+      object-fit: contain;
+      /* If your image has a white background, 'multiply' blends it perfectly into the footer */
+      mix-blend-mode: multiply; 
+    }
+    
+    .footer-tagline { color: var(--muted); font-size: 14px; max-width: 300px; line-height: 1.65; }
+    .footer-col h4 {
+      font-size: 11.5px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .12em;
+      color: var(--text); margin-bottom: 20px;
+    }
+    .footer-col ul { display: flex; flex-direction: column; gap: 12px; }
+    .footer-col a, .footer-col button {
+      color: var(--text-soft); font-size: 14px;
+      transition: color .2s;
+      background: none; border: 0; padding: 0; text-align: left;
+      min-height: 24px;
+    }
+    .footer-col a:hover, .footer-col button:hover { color: var(--green-2); }
+    .footer-bottom {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; flex-wrap: wrap;
+      padding: 24px 0 32px;
+      border-top: 1px solid var(--green-soft);
+      color: var(--muted); font-size: 13.5px;
+    }
+    .footer-social { display: flex; gap: 8px; }
+    .footer-social button {
+      width: 38px; height: 38px;
+      display: grid; place-items: center;
+      border-radius: 10px;
+      background: rgba(255,255,255,.8);
+      border: 1.5px solid var(--green-border);
+      color: var(--green-deep); font-size: 12px; font-weight: 700;
+      transition: background .2s, color .2s, transform .2s, border-color .2s;
+    }
+    .footer-social button:hover { background: var(--green-2); color: #fff; border-color: var(--green-2); transform: translateY(-2px); }
+
+    /* ============================================================
+       MODALS
+    ============================================================ */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(10,15,28,.55);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 1000;
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px;
+      opacity: 0; pointer-events: none;
+      transition: opacity .3s ease;
+      overflow-y: auto;
+    }
+    .modal-overlay.active { opacity: 1; pointer-events: auto; }
+    .modal {
+      background: #fff;
+      border: 2px solid var(--green-border);
+      border-radius: 24px;
+      width: 100%;
+      max-width: 560px;
+      max-height: calc(100vh - 40px);
+      overflow-y: auto;
+      box-shadow:
+        0 0 0 1px var(--green-border),
+        0 40px 100px -20px rgba(4,120,87,.35);
+      transform: translateY(16px) scale(.97);
+      transition: transform .35s cubic-bezier(.2,.8,.2,1);
+      position: relative;
+      margin: auto;
+    }
+    .modal-overlay.active .modal { transform: none; }
+
+    .modal-brand {
+      display: flex; align-items: center; gap: 10px;
+      padding: 18px 22px;
+      background: linear-gradient(180deg, var(--panel-soft), #ffffff);
+      border-bottom: 1.5px solid var(--green-border);
+      border-radius: 22px 22px 0 0;
+    }
+    .modal-brand .logo-mark { width: 30px; height: 30px; flex-shrink: 0; }
+    .modal-brand .logo-text strong { font-size: 14px; letter-spacing: -.01em; }
+    .modal-brand .logo-text span { font-size: 8.5px; letter-spacing: .2em; margin-top: 2px; }
+    .modal-brand-tag {
+      margin-left: auto;
+      font-size: 10px; font-weight: 600;
+      letter-spacing: .12em; text-transform: uppercase;
+      color: var(--green-deep);
+      background: var(--green-soft);
+      padding: 4px 10px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+
+    .modal-close {
+      position: absolute; top: 14px; right: 14px;
+      width: 36px; height: 36px;
+      display: grid; place-items: center;
+      border-radius: 10px;
+      background: var(--green-soft);
+      color: var(--green-deep);
+      border: 0;
+      font-size: 15px; font-weight: 600;
+      transition: background .2s, color .2s, transform .2s;
+      z-index: 3;
+    }
+    .modal-close:hover { background: var(--green-2); color: #fff; transform: rotate(90deg); }
+
+    .modal-body { padding: 32px 44px 44px; }
+    .modal-head { margin-bottom: 24px; }
+    .modal-head h2 {
+      font-family: "Fraunces", Georgia, serif;
+      font-size: clamp(1.35rem, 3vw, 1.7rem);
+      font-weight: 500; letter-spacing: -.02em;
+      color: var(--text); margin-bottom: 10px;
+      line-height: 1.2;
+    }
+    .modal-head p { color: var(--text-soft); font-size: 15px; }
+
+    .modal-rich { display: flex; flex-direction: column; gap: 14px; }
+    .modal-rich .rich-block {
+      padding: 16px 18px;
+      background: var(--panel-soft);
+      border: 1.5px solid var(--green-border);
+      border-radius: 14px;
+    }
+    .modal-rich .rich-block h3 {
+      font-size: 0.97rem; font-weight: 700;
+      color: var(--text); margin-bottom: 8px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .modal-rich .rich-block h3 .ico {
+      width: 26px; height: 26px;
+      display: grid; place-items: center;
+      border-radius: 8px;
+      background: var(--green-soft);
+      font-size: 13px;
+      flex-shrink: 0;
+    }
+    .modal-rich .rich-block p { color: var(--text-soft); font-size: 13.5px; line-height: 1.65; }
+    .modal-rich .rich-block ul {
+      margin-top: 8px;
+      display: flex; flex-direction: column; gap: 6px;
+    }
+    .modal-rich .rich-block ul li {
+      color: var(--text-soft); font-size: 13px;
+      padding-left: 20px; position: relative;
+    }
+    .modal-rich .rich-block ul li::before {
+      content: "✓"; position: absolute; left: 0;
+      color: var(--green-2); font-weight: 700;
+    }
+
+    .modal-cta-row { display: flex; gap: 10px; margin-top: 8px; flex-wrap: wrap; }
+    .modal-cta-row .btn { flex: 1; min-width: 140px; }
+
+    .field { margin-bottom: 16px; }
+    .field label {
+      display: block;
+      font-size: 13px; font-weight: 600;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+    .field label .optional { font-weight: 400; color: var(--muted); font-size: 12px; margin-left: 4px; }
+    .field input, .field textarea, .field select {
+      width: 100%;
+      font-family: inherit;
+      font-size: 15px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1.5px solid var(--border-strong);
+      background: #fff;
+      color: var(--text);
+      transition: border-color .2s, box-shadow .2s;
+      min-height: 44px;
+    }
+    .field input:focus, .field textarea:focus, .field select:focus {
+      outline: none;
+      border-color: var(--green-2);
+      box-shadow: 0 0 0 4px rgba(16,185,129,.15);
+    }
+    .field textarea { resize: vertical; min-height: 100px; }
+
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+    .modal-footer { margin-top: 20px; display: flex; gap: 10px; flex-wrap: wrap; }
+    .modal-footer .btn { flex: 1; min-width: 140px; }
+    .modal-note {
+      font-size: 12.5px;
+      color: var(--muted);
+      text-align: center;
+      margin-top: 16px;
+    }
+    .modal-note a, .modal-note button {
+      color: var(--green-2); font-weight: 600;
+      background: none; border: 0; padding: 0; cursor: pointer;
+      font-size: inherit;
+    }
+
+    .form-error {
+      margin: 4px 0 12px;
+      padding: 10px 14px;
+      font-size: 13.5px;
+      font-weight: 500;
+      color: #b91c1c;
+      background: #fef2f2;
+      border: 1.5px solid #fecaca;
+      border-radius: 10px;
+    }
+
+    .form-success { text-align: center; padding: 12px 0; display: none; }
+    .form-success.show { display: block; }
+    .form-success-icon {
+      width: 64px; height: 64px;
+      margin: 0 auto 20px;
+      border-radius: 50%;
+      background: var(--green-soft);
+      color: var(--green-2);
+      display: grid; place-items: center;
+      font-size: 28px;
+      animation: pop .5s cubic-bezier(.2,.8,.2,1);
+    }
+    @keyframes pop {
+      0% { transform: scale(0); }
+      70% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+    .form-success h3 {
+      font-family: "Fraunces", Georgia, serif;
+      font-size: 1.4rem; font-weight: 500;
+      margin-bottom: 10px;
+      color: var(--text);
+    }
+    .form-success p { color: var(--text-soft); font-size: 15px; margin-bottom: 24px; }
+
+    .honeypot {
+      position: absolute; left: -9999px;
+      width: 1px; height: 1px;
+      overflow: hidden; opacity: 0;
+    }
+
+    /* ============================================================
+       RESPONSIVE
+    ============================================================ */
+    @media (min-width: 1440px) {
+      :root { --maxw: 1240px; --gutter: 40px; }
+      .hero-panel { padding: 140px 0 120px; }
+    }
+    @media (max-width: 1024px) {
+      :root { --gutter: 20px; }
+      .panel { padding: 80px 0; border-radius: 28px; margin: 18px auto; }
+      .hero-panel { padding: 100px 0 80px; }
+      .service-grid { grid-template-columns: 1fr; max-width: 560px; margin: 0 auto; }
+      .steps { grid-template-columns: repeat(2, 1fr); gap: 28px 32px; }
+      .why-grid { grid-template-columns: repeat(2, 1fr); }
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 40px; }
+      .footer-logo-img { height: 44px; }
+    }
+    @media (max-width: 900px) {
+      :root { --gutter: 18px; }
+      .main-nav, .header-actions .btn-ghost { display: none; }
+      .nav-toggle { display: flex; }
+      .logo-mark { width: 38px; height: 38px; }
+      .header-inner { height: 68px; }
+      .hero-panel { margin-top: 84px; padding: 90px 0 70px; }
+      .hero-title { font-size: clamp(1.9rem, 6.5vw, 2.8rem); }
+      .panel { padding: 64px 0; border-radius: 24px; margin: 16px auto; }
+      .cta-panel { padding: 64px 0; }
+      .footer-panel { padding: 56px 0 0; }
+    }
+    @media (max-width: 640px) {
+      :root { --gutter: 14px; }
+      body { padding-bottom: 24px; }
+      .panel { border-radius: 22px; margin: 12px auto; padding: 56px 0; border-width: 1.5px; }
+      .hero-panel { margin-top: 78px; padding: 80px 0 60px; border-radius: 22px; }
+      .hero-title { font-size: clamp(1.75rem, 7.5vw, 2.4rem); line-height: 1.12; }
+      .hero-sub { font-size: 0.98rem; }
+      .hero-proof { flex-direction: column; gap: 10px; text-align: center; margin-top: 36px; }
+      .hero-ctas .btn, .cta-actions .btn { flex: 1 1 auto; min-width: 140px; }
+      .service { padding: 32px 24px; }
+      .steps { grid-template-columns: 1fr; gap: 32px; }
+      .why-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+      .footer-bottom { justify-content: center; text-align: center; }
+      .modal-body { padding: 24px 22px 28px; }
+      .modal-brand { padding: 14px 18px; border-radius: 20px 20px 0 0; }
+      .modal-brand-tag { display: none; }
+      .modal-head h2 { font-size: 1.25rem; }
+      .modal-footer .btn { min-width: 100%; }
+      .quote-author { flex-direction: column; text-align: center; }
+      .quote-author > div { text-align: center; }
+      .field-row { grid-template-columns: 1fr; }
+      .modal-close { top: 10px; right: 10px; width: 34px; height: 34px; }
+      .footer-logo-img { height: 50px; }
+    }
+    @media (max-width: 380px) {
+      :root { --gutter: 12px; }
+      .panel { border-radius: 20px; padding: 44px 0; }
+      .hero-panel { padding: 68px 0 50px; }
+      .hero-title { font-size: 1.6rem; }
+      .eyebrow { font-size: 12px; padding: 6px 12px 6px 6px; }
+      .pillar { font-size: 12.5px; padding: 8px 12px; }
+      .btn-lg { padding: 13px 20px; font-size: 14px; }
+      .modal-body { padding: 22px 18px 24px; }
+      .modal-brand { padding: 12px 16px; }
+      .modal-brand .logo-mark { width: 26px; height: 26px; }
+      .modal-brand .logo-text strong { font-size: 13px; }
+      .modal-brand .logo-text span { font-size: 8px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+      .hero-inner > * { opacity: 1; transform: none; }
+    }
+    @media (hover: none) and (pointer: coarse) {
+      .btn { min-height: 46px; }
+      .main-nav a, .main-nav button, .footer-col a, .footer-col button { min-height: 44px; display: inline-flex; align-items: center; }
+    }
+  </style>
+</head>
+<body class="splash-active">
+
+  <!-- SPLASH -->
+  <div class="splash" id="splash" role="status" aria-label="Loading Powercob Technologies">
+    <div class="splash-inner">
+      <svg class="splash-logo" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Powercob Technologies logo">
+        <defs>
+          <linearGradient id="splashGradA" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#10b981"/><stop offset="100%" stop-color="#059669"/></linearGradient>
+          <linearGradient id="splashGradB" x1="1" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#34d399"/><stop offset="100%" stop-color="#10b981"/></linearGradient>
+          <linearGradient id="splashGradC" x1="0" y1="1" x2="1" y2="0"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#3b82f6"/></linearGradient>
+        </defs>
+        <path class="draw-shape" d="M60 22 L96 82 L24 82 Z" fill="none" stroke="url(#splashGradA)" stroke-width="6" stroke-linejoin="round" stroke-linecap="round"/>
+        <rect class="draw-shape" x="36" y="40" width="48" height="48" rx="12" fill="none" stroke="url(#splashGradB)" stroke-width="6" stroke-linejoin="round" stroke-linecap="round"/>
+        <circle class="draw-shape" cx="60" cy="60" r="22" fill="none" stroke="url(#splashGradC)" stroke-width="6"/>
+        <circle class="draw-shape" cx="60" cy="60" r="6" fill="#ffffff"/>
+      </svg>
+      <div class="splash-wordmark">
+        <h1>Powercob Technologies</h1>
+        <p>Websites · Apps · Networks</p>
+      </div>
+      <div class="splash-bar"></div>
+    </div>
+    <span class="splash-skip">Tap anywhere to skip</span>
+  </div>
+
+  <!-- HEADER -->
+  <header class="site-header" id="siteHeader">
+    <div class="container header-inner">
+      <a href="#" class="logo" aria-label="Powercob Technologies home" data-open-modal="home">
+        <svg class="logo-mark" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
+          <defs>
+            <linearGradient id="hdrGradA" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#10b981"/><stop offset="100%" stop-color="#059669"/></linearGradient>
+            <linearGradient id="hdrGradB" x1="1" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#34d399"/><stop offset="100%" stop-color="#10b981"/></linearGradient>
+            <linearGradient id="hdrGradC" x1="0" y1="1" x2="1" y2="0"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#3b82f6"/></linearGradient>
+          </defs>
+          <path d="M60 22 L96 82 L24 82 Z" fill="none" stroke="url(#hdrGradA)" stroke-width="7" stroke-linejoin="round"/>
+          <rect x="36" y="40" width="48" height="48" rx="12" fill="none" stroke="url(#hdrGradB)" stroke-width="7" stroke-linejoin="round"/>
+          <circle cx="60" cy="60" r="22" fill="none" stroke="url(#hdrGradC)" stroke-width="7"/>
+          <circle cx="60" cy="60" r="6" fill="#0a0f1c"/>
+        </svg>
+        <span class="logo-text">
+          <strong>Powercob</strong>
+          <span>Technologies</span>
+        </span>
+      </a>
+
+      <nav class="main-nav" aria-label="Primary">
+        <ul>
+          <li><button data-open-modal="services">Services</button></li>
+          <li><button data-open-modal="process">Process</button></li>
+          <li><button data-open-modal="why">Why us</button></li>
+          <li><button data-open-modal="about">About</button></li>
+        </ul>
+      </nav>
+
+      <div class="header-actions">
+        <button class="btn btn-ghost" data-open-modal="signin">Client login</button>
+        <button class="btn btn-gradient" data-open-modal="project">Start a project</button>
+        <button class="nav-toggle" aria-label="Open menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="panel hero-panel">
+    <div class="container hero-inner">
+      <div class="eyebrow">
+        <span class="eyebrow-dot" aria-hidden="true"></span>
+        <span>Now accepting new projects for Q1 2026</span>
+      </div>
+
+      <h1 class="hero-title">
+        We build <em>professional websites</em>, business applications &amp; networking solutions
+      </h1>
+
+      <p class="hero-sub">
+        Powercob Technologies is a software and infrastructure studio. We design and develop
+        the websites, internal systems, and networks that keep modern organizations
+        running — reliably, securely, and for the long term.
+      </p>
+
+      <div class="hero-pillars" aria-label="Our three core services">
+        <button class="pillar" data-open-modal="services"><span aria-hidden="true">🌐</span> Websites &amp; Web Apps</button>
+        <button class="pillar" data-open-modal="services"><span aria-hidden="true">⚙️</span> Business Applications</button>
+        <button class="pillar" data-open-modal="services"><span aria-hidden="true">🔌</span> Networking Solutions</button>
+      </div>
+
+      <div class="hero-ctas">
+        <button class="btn btn-gradient btn-lg" data-open-modal="project">Start a project →</button>
+        <button class="btn btn-outline btn-lg" data-open-modal="contact">Talk to us</button>
+      </div>
+
+      <div class="hero-proof">
+        <div class="avatars" aria-hidden="true">
+          <span></span><span></span><span></span><span></span>
+        </div>
+        <span><strong>4.9/5</strong> from 120+ client engagements</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRUSTED -->
+  <section class="panel panel-soft trusted-panel">
+    <div class="container">
+      <p class="trusted-label">Organizations we've worked with</p>
+    </div>
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee-track">
+        <span>Acme Corp</span><span>Nova Labs</span><span>Vertex</span><span>Northwind</span>
+        <span>Lumen</span><span>Orbit</span><span>Helix</span><span>Strata</span>
+        <span>Acme Corp</span><span>Nova Labs</span><span>Vertex</span><span>Northwind</span>
+        <span>Lumen</span><span>Orbit</span><span>Helix</span><span>Strata</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="panel" id="services">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-tag">What we do</span>
+        <h2 class="section-title">Three services. One team you can rely on.</h2>
+        <p class="section-sub">
+          We specialize in three areas — and we do each of them properly. No
+          half-finished deliverables, no handoffs to unknown subcontractors.
+        </p>
+      </div>
+
+      <div class="service-grid">
+        <article class="service" role="button" tabindex="0" data-open-modal="services" aria-label="Learn more about website development">
+          <div class="service-icon blue">🌐</div>
+          <h3>Website &amp; Web Application Development</h3>
+          <p>Fast, accessible, and search-friendly websites and web apps — from marketing sites to complex customer portals.</p>
+          <ul class="service-list">
+            <li>Corporate &amp; product websites</li>
+            <li>Customer portals &amp; dashboards</li>
+            <li>E-commerce &amp; booking systems</li>
+            <li>Performance, SEO &amp; accessibility</li>
+          </ul>
+        </article>
+
+        <article class="service" role="button" tabindex="0" data-open-modal="services" aria-label="Learn more about business applications">
+          <div class="service-icon purple">⚙️</div>
+          <h3>Business Application Development</h3>
+          <p>Custom software that fits how your organization actually works — not the other way around.</p>
+          <ul class="service-list">
+            <li>Internal tools &amp; admin systems</li>
+            <li>ERP, CRM &amp; inventory systems</li>
+            <li>Workflow automation &amp; integrations</li>
+            <li>Reporting, analytics &amp; dashboards</li>
+          </ul>
+        </article>
+
+        <article class="service" role="button" tabindex="0" data-open-modal="services" aria-label="Learn more about networking solutions">
+          <div class="service-icon green">🔌</div>
+          <h3>Networking Solutions</h3>
+          <p>Reliable, secure network infrastructure designed and deployed for offices, branches, and multi-site organizations.</p>
+          <ul class="service-list">
+            <li>LAN, WAN &amp; Wi-Fi design</li>
+            <li>Firewalls, VPNs &amp; secure remote access</li>
+            <li>Server setup &amp; structured cabling</li>
+            <li>Network monitoring &amp; support</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section class="panel panel-warm" id="process">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-tag">How we work</span>
+        <h2 class="section-title">A clear process, from first call to launch</h2>
+        <p class="section-sub">Every engagement follows the same four stages — so you always know where the project stands and what comes next.</p>
+      </div>
+
+      <div class="steps">
+        <div class="step">
+          <span class="step-num">01</span>
+          <h3>Discover</h3>
+          <p>We listen first. A short workshop to understand your goals, users, and constraints.</p>
+        </div>
+        <div class="step">
+          <span class="step-num">02</span>
+          <h3>Design</h3>
+          <p>We map the solution — architecture, screens, network layout — and get your sign-off.</p>
+        </div>
+        <div class="step">
+          <span class="step-num">03</span>
+          <h3>Build</h3>
+          <p>We develop in weekly iterations with demos, so nothing is a surprise at the end.</p>
+        </div>
+        <div class="step">
+          <span class="step-num">04</span>
+          <h3>Support</h3>
+          <p>We launch, monitor, and maintain — with clear SLAs and a direct line to the team.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY US -->
+  <section class="panel panel-cool" id="why">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-tag">Why Powercob</span>
+        <h2 class="section-title">Built for the long term</h2>
+        <p class="section-sub">We're not a body shop. We're a small, senior team that takes ownership of what we build — and stays around after launch.</p>
+      </div>
+
+      <div class="why-grid">
+        <div class="why-item">
+          <h3>Senior engineers only</h3>
+          <p>Every project is led by developers with 8+ years of experience. No junior handoffs.</p>
+        </div>
+        <div class="why-item">
+          <h3>Fixed-scope pricing</h3>
+          <p>We quote per project, not per hour. You know the cost before we start.</p>
+        </div>
+        <div class="why-item">
+          <h3>Software &amp; network, together</h3>
+          <p>One team for your web apps, internal systems, and the infrastructure they run on.</p>
+        </div>
+        <div class="why-item">
+          <h3>Documentation included</h3>
+          <p>Every deliverable ships with clear docs — so your team isn't locked in to us.</p>
+        </div>
+        <div class="why-item">
+          <h3>Ongoing support</h3>
+          <p>Optional maintenance retainers with guaranteed response times and uptime SLAs.</p>
+        </div>
+        <div class="why-item">
+          <h3>Security by default</h3>
+          <p>Encryption, access control, and secure defaults are built in from day one.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIAL -->
+  <section class="panel panel-warm">
+    <div class="container">
+      <div class="quote-wrap">
+        <blockquote class="quote">
+          "Powercob rebuilt our internal operations platform and redesigned our office
+          network in the same quarter. Both have run without a single incident since."
+        </blockquote>
+        <div class="quote-author">
+          <div class="quote-avatar" aria-hidden="true">SM</div>
+          <div>
+            <strong>Sarah Mitchell</strong>
+            <span>VP Operations, Nova Labs</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="panel panel-dark cta-panel" id="start">
+    <div class="container">
+      <div class="cta-inner">
+        <h2>Have a project in mind?</h2>
+        <p>Tell us what you're building. We'll reply within one business day with next steps.</p>
+        <div class="cta-actions">
+          <button class="btn btn-white btn-lg" data-open-modal="project">Start a project →</button>
+          <button class="btn btn-glass btn-lg" data-open-modal="contact">Talk to us</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="panel panel-warm footer-panel" id="about">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <button class="footer-logo-wrap" data-open-modal="home" aria-label="Powercob Technologies home">
+            <!-- YOUR NEW LOGO IMAGE HERE -->
+            <img src="https://i.postimg.cc/dVnPD75R/Powercob-Technologies-Office-Hero.png" alt="Powercob Technologies" class="footer-logo-img" />
+          </button>
+          <p class="footer-tagline">
+            Professional websites, business applications, and networking solutions —
+            designed and built by a small senior team.
+          </p>
+        </div>
+
+        <div class="footer-col">
+          <h4>Services</h4>
+          <ul>
+            <li><button data-open-modal="services">Website &amp; web apps</button></li>
+            <li><button data-open-modal="services">Business applications</button></li>
+            <li><button data-open-modal="services">Networking solutions</button></li>
+            <li><button data-open-modal="process">Our process</button></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Company</h4>
+          <ul>
+            <li><button data-open-modal="about">About</button></li>
+            <li><button data-open-modal="careers">Careers</button></li>
+            <li><button data-open-modal="why">Why us</button></li>
+            <li><button data-open-modal="contact">Contact</button></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Get in touch</h4>
+          <ul>
+            <li><button data-open-modal="project">Start a project</button></li>
+            <li><button data-open-modal="contact">Request a quote</button></li>
+            <li><button data-open-modal="signin">Client login</button></li>
+            <li><button data-open-modal="support">Support</button></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>© 2026 Powercob Technologies. All rights reserved.</p>
+        <div class="footer-social">
+          <button data-open-modal="social" aria-label="Twitter">𝕏</button>
+          <button data-open-modal="social" aria-label="LinkedIn">in</button>
+          <button data-open-modal="social" aria-label="GitHub">GH</button>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- MODALS -->
+  <div class="modal-overlay" id="modal-home" role="dialog" aria-modal="true" aria-labelledby="home-title">
+    <div class="modal">
+      <div class="modal-brand">
+        <svg class="logo-mark" viewBox="0 0 120 120" aria-hidden="true"><defs><linearGradient id="mhA" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#10b981"/><stop offset="100%" stop-color="#059669"/></linearGradient><linearGradient id="mhB" x1="1" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#34d399"/><stop offset="100%" stop-color="#10b981"/></linearGradient><linearGradient id="mhC" x1="0" y1="1" x2="1" y2="0"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#3b82f6"/></linearGradient></defs><path d="M60 22 L96 82 L24 82 Z" fill="none" stroke="url(#mhA)" stroke-width="7" stroke-linejoin="round"/><rect x="36" y="40" width="48" height="48" rx="12" fill="none" stroke="url(#mhB)" stroke-width="7" stroke-linejoin="round"/><circle cx="60" cy="60" r="22" fill="none" stroke="url(#mhC)" stroke-width="7"/><circle cx="60" cy="60" r="6" fill="#0a0f1c"/></svg>
+        <span class="logo-text"><strong>Powercob</strong><span>Technologies</span></span>
+        <span class="modal-brand-tag">Welcome</span>
+      </div>
+      <button class="modal-close" data-close-modal aria-label="Close">✕</button>
+      <div class="modal-body">
+        <div class="modal-head"><h2 id="home-title">Powercob Technologies</h2><p>A software and infrastructure studio building websites, business applications, and networks.</p></div>
+        <div class="modal-rich">
+          <div class="rich-block"><h3><span class="ico">🌐</span> Websites &amp; web apps</h3><p>Fast, accessible websites and complex customer portals.</p></div>
+          <div class="rich-block"><h3><span class="ico">⚙️</span> Business applications</h3><p>Custom software that fits how your organization works.</p></div>
+          <div class="rich-block"><h3><span class="ico">🔌</span> Networking solutions</h3><p>Reliable network infrastructure for offices and branches.</p></div>
+        </div>
+        <div class="modal-cta-row" style="margin-top:20px">
+          <button class="btn btn-gradient btn-block" data-open-modal="project">Start a project →</button>
+          <button class="btn btn-outline btn-block" data-open-modal="contact">Talk to us</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modal-services" role="dialog" aria-modal="true" aria-labelledby="services-title">
+    <div class="modal">
+      <div class="modal-brand">
+        <svg class="logo-mark" viewBox="0 0 120 120" aria-hidden="true"><defs><linearGradient id="msA" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#10b981"/><stop offset="100%" stop-color="#059669"/></linearGradient><linearGradient id="msB" x1="1" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#34d399"/><stop offset="100%" stop-color="#10b981"/></linearGradient><linearGradient id="msC" x1="0" y1="1" x2="1" y2="0"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#3b82f6"/></linearGradient></defs><path d="M60 22 L96 82 L24 82 Z" fill="none" stroke="url(#msA)" stroke-width="7" stroke-linejoin="round"/><rect x="36" y="40" width="48" height="48" rx="12" fill="none" stroke="url(#msB)" stroke-width="7" stroke-linejoin="round"/><circle cx="60" cy="60" r="22" fill="none" stroke="url(#msC)" stroke-width="7"/><circle cx="60" cy="60" r="6" fill="#0a0f1c"/></svg>
+        <span class="logo-text"><strong>Powercob</strong><span>Technologies</span></span>
+        <span class="modal-brand-tag">What we do</span>
+      </div>
+      <button class="modal-close" data-close-modal aria-label="Close">✕</button>
+      <div class="modal-body">
+        <div class="modal-head"><h2 id="services-title">Our three services</h2><p>We specialize in three areas — and we do each of them properly.</p></div>
+        <div class="modal-rich">
+          <div class="rich-block"><h3><span class="ico">🌐</span> Website &amp; Web App Development</h3><ul><li>Corporate &amp; product websites</li><li>Customer portals &amp; dashboards</li><li>E-commerce &amp; booking systems</li><li>Performance, SEO &amp; accessibility</li></ul></div>
+          <div class="rich-block"><h3><span class="ico">⚙️</span> Business Application Development</h3><ul><li>Internal tools &amp; admin systems</li><li>ERP, CRM &amp; inventory systems</li><li>Workflow automation &amp; integrations</li><li>Reporting, analytics &amp; dashboards</li></ul></div>
+          <div class="rich-block"><h3><span class="ico">🔌</span> Networking Solutions</h3><ul><li>LAN, WAN &amp; Wi-Fi design</li><li>Firewalls, VPNs &amp; secure remote access</li><li>Server setup &amp; structured cabling</li><li>Network monitoring &amp; support</li></ul></div>
+        </div>
+        <div class="modal-cta-row" style="margin-top:20px">
+          <button class="btn btn-gradient btn-block" data-open-modal="project">Start a project →</button>
+          <button class="btn btn-outline btn-block" data-open-modal="contact">Ask a question</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modal-process" role="dialog" aria-modal="true" aria-labelledby="process-title">
+    <div class="modal">
+      <div class="modal-brand">
+        <svg class="logo-mark" viewBox="0 0 120 120" aria-hidden="true"><defs><linearGradient id="mpA" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#10b981"/><stop offset="100%" stop-color="#059669"/></linearGradient><linearGradient id="mpB" x1="1" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#34d399"/><stop offset="100%" stop-color="#10b981"/></linearGradient><linearGradient id="mpC" x1="0" y1="1" x2="1" y2="0"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#3b82f6"/></linearGradient></defs><path d="M60 22 L96 82 L24 82 Z" fill="none" stroke="url(#mpA)" stroke-width="7" stroke-linejoin="round"/><rect x="36" y="40" width="48" height="48" rx="12" fill="none" stroke="url(#mpB)" stroke-width="7" stroke-linejoin="round"/><circle cx="60" cy="60" r="22" fill="none" stroke="url(#mpC)" stroke-width="7"/><circle cx="60" cy="60" r="6" fill="#0a0f1c"/></svg>
+        <span class="logo-text"><strong>Powercob</strong><span>Technologies</span></span>
+        <span class="modal-brand-tag">Process</span>
+      </div>
+      <button class="modal-close" data-close-modal aria-label="Close">✕</button>
+      <div class="modal-body">
+        <div class="modal-head"><h2 id="process-title">Our four-stage process</h2><p>Every engagement follows the same clear path.</p></div>
+        <div class="modal-rich">
+          <div class="rich-block"><h3><span class="ico">01</span> Discover</h3><p>Workshop to understand your goals, users, and constraints.</p></div>
+          <div class="rich-block"><h3><span class="ico">02</span> Design</h3><p>Map the solution — architecture, screens, network layout — and get sign-off.</p></div>
+          <div class="rich-block"><h3><span class="ico">03</span> Build</h3><p>Weekly iterations with demos. Nothing is a surprise at the end.</p></div>
+          <div class="rich-block"><h3><span class="ico">04</span> Support</h3><p>Launch, monitor, maintain — with clear SLAs and a direct line to the team.</p></div>
+        </div>
+        <div class="modal-cta-row" style="margin-top:20px">
+          <button class="btn btn-gradient btn-block" data-open-modal="project">Start a project →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modal-why" role="dialog" aria-modal="true" aria-labelledby="why-title">
+    <div class="modal">
+      <div class="modal-brand">
+        <svg class="logo-mark" viewBox="0 0 120 120" aria-hidden="true"><defs><linearGradient id="mwA" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#10b981"/><stop offset="100%" stop-color="#059669"/></linearGradient><linearGradient id="mwB" x1="1" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#34d399"/><stop offset="100%" stop-color="#10b981"/></linearGradient><linearGradient id="mwC" x1="0" y1="1" x2="1" y2="0"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#3b82f6"/></linearGradient></defs><path d="M60 22 L96 82 L24 82 Z" fill="none" stroke="url(#mwA)" stroke-width="7" stroke-linejoin="round"/><rect x="36" y="40" width="48" height="48" rx="12" fill="none" stroke="url(#mwB)" stroke-width="7" stroke-linejoin="round"/><circle cx="60" cy="60" r="22" fill="none" stroke="url(#mwC)" stroke-width="7"/><circle cx="60" cy="60" r="6" fill="#0a0f1c"/></svg>
+        <span class="logo-text"><strong>Powercob</strong><span>Technologies</span></span>
+        <span class="modal-brand-tag">Why us</span>
+      </div>
+      <button class="modal-close" data-close-modal aria-label="Close">✕</button>
+      <div class="modal-body">
+        <div class="modal-head"><h2 id="why-title">Built for the long term</h2><p>Not a body shop. A small, senior team that stays around after launch.</p></div>
+        <div class="modal-rich">
+          <div class="rich-block"><h3><span class="ico">👤</span> Senior engineers only</h3><p>8+ years of experience on every project. No junior handoffs.</p></div>
+          <div class="rich-block"><h3><span class="ico">💵</span> Fixed-scope pricing</h3><p>Quote per project, not per hour. You know the cost before we start.</p></div>
+          <div class="rich-block"><h3><span class="ico">🔗</span> Software &amp; network, together</h3><p>One team for your apps, internal systems, and infrastructure.</p></div>
+          <div class="rich-block"><h3><span class="ico">📘</span> Documentation included</h3><p>Clear docs on every deliverable — your team isn't locked in.</p></div>
+          <div class="rich-block"><h3><span class="ico">🛠️</span> Ongoing support</h3><p>Optional retainers with guaranteed response times and SLAs.</p></div>
+          <div class="rich-block"><h3><span class="ico">🔒</span> Security by default</h3><p>Encryption, access control, secure defaults from day one.</p></div>
+        </div>
+        <div class="modal-cta-row" style="margin-top:20px">
+          <button class="btn btn-gradient btn-block" data-open-modal="project">Start a project →</button>
+          <button class="btn btn-outline btn-block" data-open-modal="contact">Talk to us</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modal-about" role="dialog" aria-modal="true" aria-labelledby="about-title">
+    <div class="modal">
+      <div class="modal-brand">
+        <svg class="logo-mark" viewBox="0 0 120 120" aria-hidden="true"><defs><linearGradient id="maA" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#10b981"/><stop offset="100%" stop-color="#059669"/></linearGradient><linearGradient id="maB" x1="1" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#34d399"/><stop offset="100%" stop-color="#10b981"/></linearGradient><linearGradient id="maC" x1="0" y1="1" x2="1" y2="0"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#3b82f6"/></linearGradient></defs><path d="M60 22 L96 82 L24 82 Z" fill="none" stroke="url(#maA)" stroke-width="7" stroke-linejoin="round"/><rect x="36" y="40" width="48" height="48" rx="12" fill="none" stroke="url(#maB)" stroke-width="7" stroke-linejoin="round"/><circle cx="60" cy="60" r="22" fill="none" stroke="url(#maC)" stroke-width="7"/><circle cx="60" cy="60" r="6" fill="#0a0f1c"/></svg>
+        <span class="logo-text"><strong>Powercob</strong><span>Technologies</span></span>
+        <span class="modal-brand-tag">About</span>
+      </div>
+      <button class="modal-close" data-close-modal aria-label="Close">✕</button>
+      <div class="modal-body">
+        <div class="modal-head"><h2 id="about-title">About Powercob Technologies</h2><p>A small senior team designing, building, and maintaining software and infrastructure.</p></div>
+        <div class="modal-rich">
+          <div class="rich-block"><h3><span class="ico">🎯</span> What we do</h3><p>Websites, web apps, business applications, and networking solutions — end to end.</p></div>
+          <div class="rich-block"><h3><span class="ico">👥</span> Who we are</h3><p>Senior engineers. No juniors, no subcontractors, no handoffs.</p></div>
+          <div class="rich-block"><h3><span class="ico">🌍</span> Who we work with</h3><p>Small and mid-sized organizations across professional services, logistics, education, and healthcare.</p></div>
+          <div class="rich-block"><h3><span class="ico">📍</span> How to reach us</h3><p>Email: <a href="mailto:powercob@gmail.com" style="color:var(--green-2);font-weight:600;">powercob@gmail.com</a><br>Phone: <span style="color:var(--muted);">to be added soon</span></p></div>
+        </div>
+        <div class="modal-cta-row" style="margin-top:20px"><button class="btn btn-gradient btn-block" data-open-modal="contact">Talk to us</button></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modal-careers" role="dialog" aria-modal="true" aria-labelledby="careers-title">
+    <div class="modal">
+      <div class="modal-brand">
+        <svg class="logo-mark" viewBox="0 0 120 120" aria-hidden="true"><defs><linearGradient id="mcA" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#10b981"/><stop offset="100%" stop-color="#059669"/></linearGradient><linearGradient id="mcB" x1="1" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#34d399"/><stop offset="100%" stop-color="#10b981"/></linearGradient><linearGradient id="mcC" x1="0" y1="1" x2="1" y2="0"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#3b82f6"/></linearGradient></defs><path d="M60 22 L96 82 L24 82 Z" fill="none" stroke="url(#mcA)" stroke-width="7" stroke-linejoin="round"/><rect x="36" y="40" width="48" height="48" rx="12" fill="none" stroke="url(#mcB)" stroke-width="7" stroke-linejoin="round"/><circle cx="60" cy="60" r="22" fill="none" stroke="url(#mcC)" stroke-width="7"/><circle cx="60" cy="60" r="6" fill="#0a0f1c"/></svg>
+        <span class="logo-text"><strong>Powercob</strong><span>Technologies</span></span>
+        <span class="modal-brand-tag">Careers</span>
+      </div>
+      <button class="modal-close" data-close-modal aria-label="Close">✕</button>
+      <div class="modal-body">
+        <div class="modal-head"><h2 id="careers-title">Work with us</h2><p>We hire slowly — only when someone exceptional comes along.</p></div>
+        <div class="modal-rich">
+          <div class="rich-block"><h3><span class="ico">💼</span> What we look for</h3><ul><li>Senior engineers with 5+ years</li><li>Full-stack web (React / Node / .NET / Python)</li><li>Network engineers (Cisco / Ubiquiti)</li><li>Designers who care about craft</li></ul></div>
+          <div class="rich-block"><h3><span class="ico">📧</span> How to apply</h3><p>Email your CV and a short note to <a href="mailto:powercob@gmail.com" style="color:var(--green-2);font-weight:600;">powercob@gmail.com</a>.</p></div>
+        </div>
+        <div class="modal-cta-row" style="margin-top:20px"><a href="mailto:powercob@gmail.com?subject=Career%20enquiry" class="btn btn-gradient btn-block">Email us →</a></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modal-support" role="dialog" aria-modal="true" aria-labelledby="support-title">
+    <div class="modal">
+      <div class="modal-brand">
+        <svg class="logo-mark" viewBox="0 0 120 120" aria-hidden="true"><defs><linearGradient id="mspA" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#10b981"/><stop offset="100%" stop-color="#059669"/></linearGradient><linearGradient id="mspB" x1="1" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#34d399"/><stop offset="100%" stop-color="#10b981"/></linearGradient><linearGradient id="mspC" x1="0" y1="1" x2="1" y2="0"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#3b82f6"/></linearGradient></defs><path d="M60 22 L96 82 L24 82 Z" fill="none" stroke="url(#mspA)" stroke-width="7" stroke-linejoin="round"/><rect x="36" y="40" width="48" height="48" rx="12" fill="none" stroke="url(#mspB)" stroke-width="7" stroke-linejoin="round"/><circle cx="60" cy="60" r="22" fill="none" stroke="url(#mspC)" stroke-width="7"/><circle cx="60" cy="60" r="6" fill="#0a0f1c"/></svg>
+        <span class="logo-text"><strong>Powercob</strong><span>Technologies</span></span>
+        <span class="modal-brand-tag">Support</span>
+      </div>
+      <button class="modal-close" data-close-modal aria-label="Close">✕</button>
+      <div class="modal-body">
+        <div class="modal-head"><h2 id="support-title">We're here to help</h2><p>Existing client? Here's how to reach us.</p></div>
+        <div class="modal-rich">
+          <div class="rich-block"><h3><span class="ico">📧</span> Email support</h3><p><a href="mailto:powercob@gmail.com" style="color:var(--green-2);font-weight:600;">powercob@gmail.com</a></p></div>
+          <div class="rich-block"><h3><span class="ico">⏱️</span> Response times</h3><ul><li>General — within 1 business day</li><li>Retainer clients — as per your SLA</li><li>Emergencies — reply with "URGENT" in the subject</li></ul></div>
+        </div>
+        <div class="modal-cta-row" style="margin-top:20px"><button class="btn btn-gradient btn-block" data-open-modal="contact">Contact support</button></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modal-social" role="dialog" aria-modal="true" aria-labelledby="social-title">
+    <div class="modal">
+      <div class="modal-brand">
+        <svg class="logo-mark" viewBox="0 0 120 120" aria-hidden="true"><defs><linearGradient id="msoA" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#10b981"/><stop offset="100%" stop-color="#059669"/></linearGradient><linearGradient id="msoB" x1="1" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#34d399"/><stop offset="100%" stop-color="#10b981"/></linearGradient><linearGradient id="msoC" x1="0" y1="1" x2="1" y2="0"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#3b82f6"/></linearGradient></defs><path d="M60 22 L96 82 L24 82 Z" fill="none" stroke="url(#msoA)" stroke-width="7" stroke-linejoin="round"/><rect x="36" y="40" width="48" height="48" rx="12" fill="none" stroke="url(#msoB)" stroke-width="7" stroke-linejoin="round"/><circle cx="60" cy="60" r="22" fill="none" stroke="url(#msoC)" stroke-width="7"/><circle cx="60" cy="60" r="6" fill="#0a0f1c"/></svg>
+        <span class="logo-text"><strong>Powercob</strong><span>Technologies</span></span>
+        <span class="modal-brand-tag">Social</span>
+      </div>
+      <button class="modal-close" data-close-modal aria-label="Close">✕</button>
+      <div class="modal-body">
+        <div class="modal-head"><h2 id="social-title">Follow Powercob</h2><p>Updates coming soon.</p></div>
+        <div class="modal-rich">
+          <div class="rich-block"><h3><span class="ico">𝕏</span> Twitter / X</h3><p>Handle to be published soon.</p></div>
+          <div class="rich-block"><h3><span class="ico">in</span> LinkedIn</h3><p>Page coming soon. Email <a href="mailto:powercob@gmail.com" style="color:var(--green-2);font-weight:600;">powercob@gmail.com</a>.</p></div>
+          <div class="rich-block"><h3><span class="ico">GH</span> GitHub</h3><p>Repos in the works.</p></div>
+        </div>
+        <div class="modal-cta-row" style="margin-top:20px"><button class="btn btn-outline btn-block" data-close-modal>Close</button></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modal-signin" role="dialog" aria-modal="true" aria-labelledby="signin-title">
+    <div class="modal">
+      <div class="modal-brand">
+        <svg class="logo-mark" viewBox="0 0 120 120" aria-hidden="true"><defs><linearGradient id="msiA" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#10b981"/><stop offset="100%" stop-color="#059669"/></linearGradient><linearGradient id="msiB" x1="1" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#34d399"/><stop offset="100%" stop-color="#10b981"/></linearGradient><linearGradient id="msiC" x1="0" y1="1" x2="1" y2="0"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#3b82f6"/></linearGradient></defs><path d="M60 22 L96 82 L24 82 Z" fill="none" stroke="url(#msiA)" stroke-width="7" stroke-linejoin="round"/><rect x="36" y="40" width="48" height="48" rx="12" fill="none" stroke="url(#msiB)" stroke-width="7" stroke-linejoin="round"/><circle cx="60" cy="60" r="22" fill="none" stroke="url(#msiC)" stroke-width="7"/><circle cx="60" cy="60" r="6" fill="#0a0f1c"/></svg>
+        <span class="logo-text"><strong>Powercob</strong><span>Technologies</span></span>
+        <span class="modal-brand-tag">Client login</span>
+      </div>
+      <button class="modal-close" data-close-modal aria-label="Close">✕</button>
+      <div class="modal-body">
+        <div class="modal-head"><h2 id="signin-title">Client login</h2><p>Access your project workspace and support portal.</p></div>
+        <form id="signin-form" novalidate>
+  <div class="field">
+    <label for="signin-email">Email</label>
+    <input id="signin-email" type="email" placeholder="you@company.com" autocomplete="email" required />
+  </div>
+  <div class="field">
+    <label for="signin-pass">Password</label>
+    <input id="signin-pass" type="password" placeholder="••••••••" autocomplete="current-password" required />
+  </div>
+  <p id="signin-error" class="form-error" role="alert" hidden></p>
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-gradient btn-block" id="signin-submit">
+      <span class="btn-label">Sign in</span>
+    </button>
+  </div>
+</form>
+        <p class="modal-note">Not a client yet? <button type="button" data-open-modal="project">Start a project</button>.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modal-project" role="dialog" aria-modal="true" aria-labelledby="project-title">
+    <div class="modal">
+      <div class="modal-brand">
+        <svg class="logo-mark" viewBox="0 0 120 120" aria-hidden="true"><defs><linearGradient id="mprA" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#10b981"/><stop offset="100%" stop-color="#059669"/></linearGradient><linearGradient id="mprB" x1="1" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#34d399"/><stop offset="100%" stop-color="#10b981"/></linearGradient><linearGradient id="mprC" x1="0" y1="1" x2="1" y2="0"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#3b82f6"/></linearGradient></defs><path d="M60 22 L96 82 L24 82 Z" fill="none" stroke="url(#mprA)" stroke-width="7" stroke-linejoin="round"/><rect x="36" y="40" width="48" height="48" rx="12" fill="none" stroke="url(#mprB)" stroke-width="7" stroke-linejoin="round"/><circle cx="60" cy="60" r="22" fill="none" stroke="url(#mprC)" stroke-width="7"/><circle cx="60" cy="60" r="6" fill="#0a0f1c"/></svg>
+        <span class="logo-text"><strong>Powercob</strong><span>Technologies</span></span>
+        <span class="modal-brand-tag">New project</span>
+      </div>
+      <button class="modal-close" data-close-modal aria-label="Close">✕</button>
+      <div class="modal-body">
+        <div class="modal-head"><h2 id="project-title">Start a project</h2><p>Tell us a little about what you need and we'll reply within one business day.</p></div>
+        <form onsubmit="event.preventDefault(); alert('Project intake is a demo — wire this to your backend or CRM.');">
+          <div class="field"><label for="proj-name">Your name</label><input id="proj-name" type="text" placeholder="Jane Doe" required /></div>
+          <div class="field"><label for="proj-email">Work email</label><input id="proj-email" type="email" placeholder="you@company.com" required /></div>
+          <div class="field"><label for="proj-type">What do you need?</label><select id="proj-type"><option>Website or web application</option><option>Business application</option><option>Networking solutions</option><option>Two or more of the above</option><option>Not sure yet — need advice</option></select></div>
+          <div class="field"><label for="proj-brief">Brief description</label><textarea id="proj-brief" placeholder="A few sentences about the project, timeline, and any constraints…"></textarea></div>
+          <div class="modal-footer"><button type="submit" class="btn btn-gradient btn-block">Send project brief →</button></div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modal-contact" role="dialog" aria-modal="true" aria-labelledby="contact-title">
+    <div class="modal">
+      <div class="modal-brand">
+        <svg class="logo-mark" viewBox="0 0 120 120" aria-hidden="true"><defs><linearGradient id="mctA" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#10b981"/><stop offset="100%" stop-color="#059669"/></linearGradient><linearGradient id="mctB" x1="1" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#34d399"/><stop offset="100%" stop-color="#10b981"/></linearGradient><linearGradient id="mctC" x1="0" y1="1" x2="1" y2="0"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#3b82f6"/></linearGradient></defs><path d="M60 22 L96 82 L24 82 Z" fill="none" stroke="url(#mctA)" stroke-width="7" stroke-linejoin="round"/><rect x="36" y="40" width="48" height="48" rx="12" fill="none" stroke="url(#mctB)" stroke-width="7" stroke-linejoin="round"/><circle cx="60" cy="60" r="22" fill="none" stroke="url(#mctC)" stroke-width="7"/><circle cx="60" cy="60" r="6" fill="#0a0f1c"/></svg>
+        <span class="logo-text"><strong>Powercob</strong><span>Technologies</span></span>
+        <span class="modal-brand-tag">Contact</span>
+      </div>
+      <button class="modal-close" data-close-modal aria-label="Close">✕</button>
+      <div class="modal-body">
+        <div id="contact-form-view">
+          <div class="modal-head"><h2 id="contact-title">Talk to us</h2><p>Send us a message and we'll get back within one business day.</p></div>
+          <form id="contact-form" action="https://formsubmit.co/powercob@gmail.com" method="POST" novalidate>
+            <input type="hidden" name="_subject" value="New enquiry from Powercob Technologies website" />
+            <input type="hidden" name="_captcha" value="false" />
+            <input type="hidden" name="_template" value="table" />
+            <input type="hidden" name="_next" value="https://example.com/?sent=1" />
+            <input type="text" name="_honey" class="honeypot" tabindex="-1" autocomplete="off" aria-hidden="true" />
+            <div class="field"><label for="contact-name">Your name</label><input id="contact-name" name="name" type="text" placeholder="Jane Doe" required autocomplete="name" /></div>
+            <div class="field-row">
+              <div class="field"><label for="contact-email">Email</label><input id="contact-email" name="email" type="email" placeholder="you@company.com" required autocomplete="email" /></div>
+              <div class="field"><label for="contact-phone">Phone <span class="optional">(optional)</span></label><input id="contact-phone" name="phone" type="tel" placeholder="Phone number to be added" autocomplete="tel" /></div>
+            </div>
+            <div class="field"><label for="contact-company">Company <span class="optional">(optional)</span></label><input id="contact-company" name="company" type="text" placeholder="Acme Inc." autocomplete="organization" /></div>
+            <div class="field"><label for="contact-service">What can we help with?</label><select id="contact-service" name="service"><option>Website or web application</option><option>Business application</option><option>Networking solutions</option><option>General enquiry</option></select></div>
+            <div class="field"><label for="contact-msg">Message</label><textarea id="contact-msg" name="message" placeholder="Tell us about your team, goals, and timeline…" required></textarea></div>
+            <div class="modal-footer"><button type="submit" class="btn btn-gradient btn-block" id="contact-submit"><span class="btn-label">Send message →</span></button></div>
+            <p class="modal-note">Or email us directly at <a href="mailto:powercob@gmail.com">powercob@gmail.com</a></p>
+          </form>
+        </div>
+        <div class="form-success" id="contact-success">
+          <div class="form-success-icon">✓</div>
+          <h3>Message sent</h3>
+          <p>Thanks for reaching out. We'll reply within one business day.</p>
+          <button class="btn btn-gradient btn-block" data-close-modal>Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JS -->
+  <script>
+    /* SPLASH */
+    (function () {
+      const splash = document.getElementById('splash');
+      const body = document.body;
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const SPLASH_DURATION = prefersReducedMotion ? 1200 : 5000;
+      let dismissed = false;
+      let timer;
+
+      function dismissSplash() {
+        if (dismissed) return;
+        dismissed = true;
+        clearTimeout(timer);
+        splash.classList.add('fade-out');
+        body.classList.remove('splash-active');
+        setTimeout(() => {
+          if (splash.parentNode) splash.parentNode.removeChild(splash);
+        }, 900);
+      }
+
+      timer = setTimeout(dismissSplash, SPLASH_DURATION);
+      splash.addEventListener('click', dismissSplash);
+      splash.addEventListener('touchstart', dismissSplash, { passive: true });
+      document.addEventListener('keydown', dismissSplash, { once: true });
+      window.addEventListener('pageshow', (e) => { if (e.persisted) dismissSplash(); });
+    })();
+
+    /* STICKY HEADER */
+    const header = document.getElementById('siteHeader');
+    const onScroll = () => header.classList.toggle('scrolled', window.scrollY > 8);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    /* MODALS */
+    const overlays = document.querySelectorAll('.modal-overlay');
+    let lastFocused = null;
+
+    function openModal(name) {
+      const overlay = document.getElementById('modal-' + name);
+      if (!overlay) return;
+      closeAllModals();
+      lastFocused = document.activeElement;
+      overlay.classList.add('active');
+      document.body.classList.add('modal-open');
+      if (name === 'contact') resetContactForm();
+      const focusable = overlay.querySelector('input, select, textarea, button:not(.modal-close)');
+      if (focusable) setTimeout(() => focusable.focus(), 100);
+    }
+    function closeModal(overlay) {
+      overlay.classList.remove('active');
+      if (!document.querySelector('.modal-overlay.active')) {
+        document.body.classList.remove('modal-open');
+        if (lastFocused) lastFocused.focus();
+      }
+    }
+    function closeAllModals() {
+      overlays.forEach(o => o.classList.remove('active'));
+      document.body.classList.remove('modal-open');
+    }
+
+    document.querySelectorAll('[data-open-modal]').forEach(trigger => {
+      const handler = (e) => { e.preventDefault(); openModal(trigger.dataset.openModal); };
+      trigger.addEventListener('click', handler);
+      if (trigger.tagName !== 'BUTTON' && trigger.tagName !== 'A') {
+        trigger.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handler(e); }
+        });
+      }
+    });
+
+    document.querySelectorAll('[data-close-modal]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const overlay = btn.closest('.modal-overlay');
+        if (overlay) closeModal(overlay);
+      });
+    });
+
+    overlays.forEach(overlay => {
+      overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) closeModal(overlay);
+      });
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        const open = document.querySelector('.modal-overlay.active');
+        if (open) closeModal(open);
+      }
+    });
+
+    document.body.addEventListener('keydown', (e) => {
+      if (e.key === 'Tab' && document.body.classList.contains('modal-open')) {
+        const modal = document.querySelector('.modal-overlay.active .modal');
+        if (!modal) return;
+        const focusables = modal.querySelectorAll(
+          'a[href], button:not([disabled]), input:not(.honeypot), select, textarea, [tabindex]:not([tabindex="-1"])'
+        );
+        if (!focusables.length) return;
+        const first = focusables[0];
+        const last = focusables[focusables.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    });
+
+    /* CONTACT FORM */
+    const contactForm = document.getElementById('contact-form');
+    const contactSubmit = document.getElementById('contact-submit');
+    const contactFormView = document.getElementById('contact-form-view');
+    const contactSuccess = document.getElementById('contact-success');
+    const submitLabel = contactSubmit ? contactSubmit.querySelector('.btn-label') : null;
+
+    function resetContactForm() {
+      if (!contactForm) return;
+      contactForm.reset();
+      if (contactFormView) contactFormView.style.display = '';
+      if (contactSuccess) contactSuccess.classList.remove('show');
+      if (contactSubmit) contactSubmit.disabled = false;
+      if (submitLabel) submitLabel.textContent = 'Send message →';
+      if (contactSubmit) contactSubmit.querySelectorAll('.spinner').forEach(s => s.remove());
+    }
+
+    if (contactForm) {
+      contactForm.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        if (!contactForm.checkValidity()) { contactForm.reportValidity(); return; }
+        contactSubmit.disabled = true;
+        if (submitLabel) submitLabel.textContent = 'Sending…';
+        if (!contactSubmit.querySelector('.spinner')) {
+          const spinner = document.createElement('span');
+          spinner.className = 'spinner';
+          contactSubmit.insertBefore(spinner, contactSubmit.firstChild);
+        }
+        try {
+          const formData = new FormData(contactForm);
+          const response = await fetch('https://formsubmit.co/ajax/powercob@gmail.com', {
+            method: 'POST',
+            headers: { 'Accept': 'application/json' },
+            body: formData
+          });
+          if (!response.ok) throw new Error('Network response not ok');
+          const data = await response.json();
+          if (data && (data.success === 'true' || data.success === true)) showContactSuccess();
+          else throw new Error('FormSubmit did not confirm success');
+        } catch (err) {
+          console.error('Contact form error:', err);
+          contactForm.action = 'https://formsubmit.co/powercob@gmail.com';
+          contactForm.method = 'POST';
+          contactForm.submit();
+        }
+      });
+    }
+
+    function showContactSuccess() {
+      if (contactFormView) contactFormView.style.display = 'none';
+      if (contactSuccess) contactSuccess.classList.add('show');
+      const focusTarget = contactSuccess.querySelector('button');
+      if (focusTarget) setTimeout(() => focusTarget.focus(), 100);
+    }
+  </script>
+  <script type="module">
+    import { supabase } from "./supabase-client.js";
+
+    const form   = document.getElementById("signin-form");
+    const emailEl = document.getElementById("signin-email");
+    const passEl  = document.getElementById("signin-pass");
+    const errEl   = document.getElementById("signin-error");
+    const submit  = document.getElementById("signin-submit");
+    const label   = submit.querySelector(".btn-label");
+
+    function showError(msg) {
+      errEl.textContent = msg;
+      errEl.hidden = false;
+    }
+    function clearError() {
+      errEl.hidden = true;
+      errEl.textContent = "";
+    }
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      clearError();
+      submit.disabled = true;
+      label.textContent = "Signing in…";
+
+      const { error } = await supabase.auth.signInWithPassword({
+        email: emailEl.value.trim(),
+        password: passEl.value,
+      });
+
+      if (error) {
+        showError(error.message);
+        submit.disabled = false;
+        label.textContent = "Sign in";
+        return;
+      }
+
+      window.location.href = "./dashboard.html";
+    });
+
+    // If they land back here with ?login=1 (from a failed dashboard session),
+    // open the login modal automatically.
+    if (new URLSearchParams(location.search).get("login") === "1") {
+      const trigger = document.querySelector('[data-open-modal="signin"]');
+      if (trigger) trigger.click();
+    }
+</script>
+</body>
+</html>

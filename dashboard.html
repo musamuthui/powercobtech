@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Client Dashboard — Powercob Technologies</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%2310b981'/></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --page-bg: #f0f5f0;
+      --panel: #ffffff;
+      --panel-soft: #f7fbf8;
+      --green: #10b981;
+      --green-2: #059669;
+      --green-deep: #047857;
+      --green-soft: #d1fae5;
+      --green-border: #a7e4c7;
+      --green-border-strong: #6ee7b7;
+      --border: #e6e9ef;
+      --text: #0a0f1c;
+      --text-soft: #4a5568;
+      --muted: #8892a3;
+      --radius-lg: 24px;
+      --radius: 16px;
+      --maxw: 1080px;
+      --shadow-panel: 0 0 0 1px var(--green-border), 0 16px 40px -20px rgba(16,185,129,.18);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { -webkit-text-size-adjust: 100%; }
+    body {
+      font-family: "Inter", system-ui, -apple-system, sans-serif;
+      background: var(--page-bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.6;
+      min-height: 100vh;
+      padding-bottom: 48px;
+    }
+    a { color: inherit; text-decoration: none; }
+    ul { list-style: none; }
+    button { font-family: inherit; cursor: pointer; }
+    img, svg { max-width: 100%; display: block; }
+
+    .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 24px; }
+
+    /* Header */
+    .dash-header {
+      display: flex; align-items: center; justify-content: space-between;
+      height: 76px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(240,245,240,.8);
+      backdrop-filter: blur(12px);
+      position: sticky; top: 0; z-index: 10;
+    }
+    .logo { display: inline-flex; align-items: center; gap: 12px; }
+    .logo-mark { width: 40px; height: 40px; flex-shrink: 0; }
+    .logo-text { display: flex; flex-direction: column; line-height: 1; }
+    .logo-text strong { font-size: 17px; font-weight: 800; letter-spacing: -.02em; }
+    .logo-text span { font-size: 9px; font-weight: 600; letter-spacing: .22em; text-transform: uppercase; color: var(--green-2); margin-top: 3px; }
+    .dash-user { display: flex; align-items: center; gap: 14px; font-size: 13.5px; color: var(--text-soft); }
+    .dash-user strong { color: var(--text); font-weight: 600; }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 10px 18px; border-radius: 10px; font-weight: 600; font-size: 14px;
+      border: 1px solid transparent; min-height: 42px; transition: transform .15s, box-shadow .15s, background .15s;
+    }
+    .btn-gradient { background: linear-gradient(135deg, var(--green-2), var(--green)); color: #fff; box-shadow: 0 8px 20px -8px rgba(16,185,129,.45); }
+    .btn-gradient:hover { transform: translateY(-1px); }
+    .btn-outline { background: #fff; color: var(--text); border-color: var(--border); }
+    .btn-outline:hover { border-color: var(--green-2); color: var(--green-deep); }
+
+    /* Main panel */
+    .dash-panel {
+      margin: 32px auto 0;
+      background: var(--panel);
+      border: 2px solid var(--green-border);
+      border-radius: 28px;
+      box-shadow: var(--shadow-panel);
+      padding: 48px;
+      min-height: 420px;
+    }
+    .dash-head { margin-bottom: 32px; }
+    .dash-head .eyebrow { font-size: 11.5px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--green-2); margin-bottom: 10px; display: block; }
+    .dash-head h1 {
+      font-family: "Fraunces", Georgia, serif;
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      font-weight: 500; letter-spacing: -.02em; line-height: 1.15;
+    }
+    .dash-head p { margin-top: 10px; color: var(--text-soft); font-size: 15px; }
+
+    /* Loading */
+    .loading { display: grid; place-items: center; padding: 60px 0; color: var(--muted); font-size: 14px; gap: 16px; }
+    .spinner-lg {
+      width: 34px; height: 34px;
+      border: 3px solid var(--green-soft);
+      border-top-color: var(--green-2);
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Projects list */
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 18px;
+    }
+    .project-card {
+      background: var(--panel-soft);
+      border: 1.5px solid var(--green-border);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      transition: border-color .2s, transform .2s, box-shadow .2s;
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .project-card:hover {
+      border-color: var(--green-border-strong);
+      transform: translateY(-2px);
+      box-shadow: 0 16px 40px -20px rgba(16,185,129,.3);
+    }
+    .project-status {
+      display: inline-flex; align-items: center; gap: 6px;
+      align-self: flex-start;
+      font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+      padding: 4px 10px; border-radius: 999px;
+      background: var(--green-soft); color: var(--green-deep);
+    }
+    .project-status::before {
+      content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--green-2);
+    }
+    .project-card h3 {
+      font-family: "Fraunces", Georgia, serif;
+      font-size: 1.25rem; font-weight: 500; letter-spacing: -.015em; line-height: 1.25;
+    }
+    .project-card p { color: var(--text-soft); font-size: 14px; line-height: 1.6; }
+    .project-card .project-meta {
+      margin-top: auto; padding-top: 12px;
+      border-top: 1px solid var(--green-soft);
+      font-size: 12.5px; color: var(--muted);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .project-card .project-meta a { color: var(--green-2); font-weight: 600; }
+
+    /* Empty state */
+    .empty-state { text-align: center; padding: 40px 16px; }
+    .empty-icon {
+      width: 72px; height: 72px; margin: 0 auto 20px;
+      border-radius: 20px; display: grid; place-items: center;
+      background: var(--green-soft); color: var(--green-deep);
+      font-size: 30px;
+    }
+    .empty-state h2 {
+      font-family: "Fraunces", Georgia, serif;
+      font-size: 1.5rem; font-weight: 500; letter-spacing: -.02em;
+      margin-bottom: 10px;
+    }
+    .empty-state p { color: var(--text-soft); font-size: 15px; margin-bottom: 24px; max-width: 420px; margin-left: auto; margin-right: auto; }
+
+    /* Error banner */
+    .error-banner {
+      padding: 14px 18px; margin-bottom: 20px;
+      background: #fef2f2; border: 1.5px solid #fecaca;
+      color: #b91c1c; font-size: 14px; border-radius: 12px;
+    }
+
+    @media (max-width: 640px) {
+      .wrap { padding: 0 16px; }
+      .dash-panel { padding: 28px 20px; border-radius: 22px; margin-top: 20px; }
+      .dash-header { height: 68px; }
+      .dash-user span.dash-email { display: none; }
+      .logo-mark { width: 34px; height: 34px; }
+      .logo-text strong { font-size: 15px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="dash-header">
+    <div class="wrap" style="display:flex;align-items:center;justify-content:space-between;width:100%;">
+      <a href="./index.html" class="logo" aria-label="Powercob Technologies home">
+        <svg class="logo-mark" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <linearGradient id="dlA" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#10b981"/><stop offset="100%" stop-color="#059669"/></linearGradient>
+            <linearGradient id="dlB" x1="1" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#34d399"/><stop offset="100%" stop-color="#10b981"/></linearGradient>
+            <linearGradient id="dlC" x1="0" y1="1" x2="1" y2="0"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#3b82f6"/></linearGradient>
+          </defs>
+          <path d="M60 22 L96 82 L24 82 Z" fill="none" stroke="url(#dlA)" stroke-width="7" stroke-linejoin="round"/>
+          <rect x="36" y="40" width="48" height="48" rx="12" fill="none" stroke="url(#dlB)" stroke-width="7" stroke-linejoin="round"/>
+          <circle cx="60" cy="60" r="22" fill="none" stroke="url(#dlC)" stroke-width="7"/>
+          <circle cx="60" cy="60" r="6" fill="#0a0f1c"/>
+        </svg>
+        <span class="logo-text">
+          <strong>Powercob</strong>
+          <span>Technologies</span>
+        </span>
+      </a>
+      <div class="dash-user">
+        <span class="dash-email">Signed in as <strong id="user-email">…</strong></span>
+        <button class="btn btn-outline" id="logout-btn">Log out</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="dash-panel">
+      <div class="dash-head">
+        <span class="eyebrow">Client dashboard</span>
+        <h1>Welcome back<span id="user-first-name"></span></h1>
+        <p>Here's an overview of your active projects with Powercob Technologies.</p>
+      </div>
+
+      <div id="error-banner" class="error-banner" hidden></div>
+
+      <div id="loading" class="loading">
+        <div class="spinner-lg"></div>
+        <span>Loading your projects…</span>
+      </div>
+
+      <div id="projects-view" hidden>
+        <div class="project-grid" id="projects-list"></div>
+      </div>
+
+      <div id="empty-view" class="empty-state" hidden>
+        <div class="empty-icon">📁</div>
+        <h2>No active projects right now</h2>
+        <p>When you're ready to start something new, we'd love to hear about it. Tell us what you have in mind and we'll reply within one business day.</p>
+        <a class="btn btn-gradient" href="./index.html?open=project#start">Start a new project →</a>
+      </div>
+    </section>
+  </main>
+
+  <script type="module">
+    import { supabase } from "./supabase-client.js";
+
+    const loadingEl  = document.getElementById("loading");
+    const projectsEl = document.getElementById("projects-view");
+    const listEl     = document.getElementById("projects-list");
+    const emptyEl    = document.getElementById("empty-view");
+    const errorEl    = document.getElementById("error-banner");
+    const emailEl    = document.getElementById("user-email");
+    const firstName  = document.getElementById("user-first-name");
+    const logoutBtn  = document.getElementById("logout-btn");
+
+    function showError(msg) {
+      errorEl.textContent = msg;
+      errorEl.hidden = false;
+    }
+
+    function formatDate(iso) {
+      try {
+        return new Date(iso).toLocaleDateString(undefined, {
+          year: "numeric", month: "short", day: "numeric"
+        });
+      } catch { return ""; }
+    }
+
+    function renderProjects(projects) {
+      if (!projects.length) {
+        emptyEl.hidden = false;
+        projectsEl.hidden = true;
+        return;
+      }
+      projectsEl.hidden = false;
+      emptyEl.hidden = true;
+      listEl.innerHTML = "";
+
+      for (const p of projects) {
+        const card = document.createElement("article");
+        card.className = "project-card";
+        card.innerHTML = `
+          <span class="project-status">${p.status}</span>
+          <h3>${escapeHtml(p.name)}</h3>
+          ${p.description ? `<p>${escapeHtml(p.description)}</p>` : ""}
+          <div class="project-meta">
+            <span>Started ${formatDate(p.created_at)}</span>
+            <a href="./index.html?open=contact">Ask about this project →</a>
+          </div>
+        `;
+        listEl.appendChild(card);
+      }
+    }
+
+    function escapeHtml(str) {
+      const div = document.createElement("div");
+      div.textContent = String(str ?? "");
+      return div.innerHTML;
+    }
+
+    async function init() {
+      // 1. Check session
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        window.location.replace("./index.html?login=1");
+        return;
+      }
+
+      const email = session.user.email || "";
+      emailEl.textContent = email;
+      const local = email.split("@")[0].split(/[._-]/)[0];
+      if (local) firstName.textContent = ", " + local.charAt(0).toUpperCase() + local.slice(1);
+
+      // 2. Fetch active projects for this user
+      const { data: projects, error } = await supabase
+        .from("projects")
+        .select("id, name, description, status, created_at")
+        .eq("client_id", session.user.id)
+        .eq("status", "active")
+        .order("created_at", { ascending: false });
+
+      loadingEl.hidden = true;
+
+      if (error) {
+        showError("We couldn't load your projects. Please try again in a moment.");
+        console.error(error);
+        return;
+      }
+
+      renderProjects(projects || []);
+    }
+
+    logoutBtn.addEventListener("click", async () => {
+      await supabase.auth.signOut();
+      window.location.href = "./index.html";
+    });
+
+    init();
+  </script>
+</body>
+</html>
