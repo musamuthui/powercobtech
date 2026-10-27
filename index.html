@@ -931,6 +931,15 @@
       outline-offset: 2px;
     }
 
+    .password-toggle .icon-eye-off,
+    .password-toggle .icon-eye { 
+      display: none; 
+    }
+    .password-toggle .icon-eye-off.is-visible,
+    .password-toggle .icon-eye.is-visible { 
+      display: block; 
+    }
+
     .form-success { text-align: center; padding: 12px 0; display: none; }
     .form-success.show { display: block; }
     .form-success-icon {
@@ -1566,19 +1575,17 @@
     <label for="signin-pass">Password</label>
     <div class="password-wrap">
       <input id="signin-pass" type="password" placeholder="••••••••" autocomplete="current-password" required />
-      <button type="button" class="password-toggle" id="toggle-password"
-              aria-label="Show password" aria-pressed="false">
-        <!-- eye-off (hidden by default) -->
-        <svg class="icon-eye-off" width="20" height="20" viewBox="0 0 24 24" fill="none"
+        <button type="button" class="password-toggle" id="toggle-password"
+          aria-label="Show password" aria-pressed="false">
+        <svg class="icon-eye-off is-visible" width="20" height="20" viewBox="0 0 24 24" fill="none"
             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
           <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
           <path d="M14.12 14.12a3 3 0 1 1-4.24-4.24"/>
           <line x1="1" y1="1" x2="23" y2="23"/>
         </svg>
-        <!-- eye (shown when password is visible) -->
         <svg class="icon-eye" width="20" height="20" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" hidden>
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
           <circle cx="12" cy="12" r="3"/>
         </svg>
@@ -1830,14 +1837,14 @@
     const label   = submit.querySelector(".btn-label");
 
     const toggleBtn = document.getElementById("toggle-password");
-    const eyeOff    = toggleBtn.querySelector(".icon-eye-off");
-    const eyeOn     = toggleBtn.querySelector(".icon-eye");
+    const iconOff   = toggleBtn.querySelector(".icon-eye-off");
+    const iconOn    = toggleBtn.querySelector(".icon-eye");
 
     toggleBtn.addEventListener("click", () => {
       const isHidden = passEl.type === "password";
       passEl.type = isHidden ? "text" : "password";
-      eyeOff.hidden = isHidden;   // hide the "eye-off" icon
-      eyeOn.hidden  = !isHidden;  // show the "eye" icon
+      iconOff.classList.toggle("is-visible", !isHidden);
+      iconOn.classList.toggle("is-visible", isHidden);
       toggleBtn.setAttribute("aria-label", isHidden ? "Hide password" : "Show password");
       toggleBtn.setAttribute("aria-pressed", String(isHidden));
       passEl.focus();
